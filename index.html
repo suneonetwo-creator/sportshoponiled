@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUNUP｜运动鞋商城</title>
+<style>
+:root{
+  --dark:#111;
+  --light:#f6f6f4;
+  --accent:#d9ff3f;
+  --gray:#777;
+  --card:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,"Microsoft YaHei",sans-serif;background:var(--light);color:var(--dark)}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:0}
+header{background:#111;color:#fff;padding:20px 6%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.logo{font-size:28px;font-weight:900;letter-spacing:-1px}
+.logo span{color:var(--accent)}
+nav{display:flex;gap:28px;font-size:14px}
+nav a:hover{color:var(--accent)}
+.header-actions{display:flex;gap:12px;align-items:center}
+.search{background:#292929;border:1px solid #444;color:#fff;border-radius:30px;padding:10px 16px;width:180px}
+.cart-btn{background:var(--accent);padding:11px 18px;border-radius:24px;font-weight:bold}
+.hero{min-height:480px;background:#d9ff3f;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:65px 8%;overflow:hidden}
+.hero h1{font-size:clamp(48px,7vw,96px);line-height:.92;letter-spacing:-5px;margin:20px 0}
+.hero p{max-width:420px;font-size:17px;line-height:1.7}
+.hero-btn{display:inline-block;margin-top:28px;background:#111;color:#fff;padding:15px 26px;border-radius:30px;font-weight:bold}
+.hero-art{position:relative;text-align:center;font-size:180px;transform:rotate(-12deg);filter:drop-shadow(15px 20px 0 rgba(0,0,0,.12))}
+.hero-art::after{content:"RUN";position:absolute;font-size:150px;font-weight:900;color:rgba(255,255,255,.28);left:0;top:100px;transform:rotate(12deg)}
+.section{padding:65px 8%}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:28px;gap:20px}
+.section h2{font-size:38px;letter-spacing:-1px}
+.section-head p{color:var(--gray)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+.filter{padding:10px 18px;border-radius:24px;background:#fff;border:1px solid #ddd}
+.filter.active,.filter:hover{background:#111;color:#fff}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.product-card{background:var(--card);border-radius:18px;overflow:hidden;position:relative;transition:.2s}
+.product-card:hover{transform:translateY(-5px)}
+.product-img{height:220px;background:#e9e9e5;display:flex;align-items:center;justify-content:center;font-size:90px;position:relative}
+.tag{position:absolute;left:14px;top:14px;background:var(--accent);padding:5px 9px;border-radius:15px;font-size:11px;font-weight:bold}
+.product-info{padding:18px}
+.product-info h3{font-size:17px;margin-bottom:8px}
+.product-info p{font-size:13px;color:var(--gray);margin-bottom:14px}
+.price-row{display:flex;justify-content:space-between;align-items:center}
+.price{font-size:20px;font-weight:bold}
+.add-btn{width:34px;height:34px;border-radius:50%;background:#111;color:#fff;font-size:20px}
+.add-btn:hover{background:var(--accent);color:#111}
+.banner{margin:0 8% 65px;background:#111;color:#fff;border-radius:24px;padding:45px 6%;display:flex;justify-content:space-between;align-items:center;gap:30px}
+.banner h2{font-size:42px;line-height:1.1}
+.banner p{color:#ccc;margin-top:12px}
+.banner .hero-btn{background:var(--accent);color:#111}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature{padding:28px;background:#fff;border-radius:18px}
+.feature-icon{font-size:30px;margin-bottom:15px}
+.feature h3{margin-bottom:8px}
+.feature p{color:var(--gray);font-size:14px;line-height:1.7}
+footer{background:#111;color:#fff;padding:45px 8%;display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+footer p{color:#aaa;margin-top:10px;font-size:13px}
+.cart-panel{position:fixed;right:-390px;top:0;width:360px;height:100%;background:#fff;z-index:20;padding:28px;box-shadow:-5px 0 25px #0002;transition:.3s;display:flex;flex-direction:column}
+.cart-panel.open{right:0}
+.cart-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.close{font-size:24px;background:none}
+.cart-items{flex:1;overflow:auto}
+.cart-item{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #eee;padding:15px 0}
+.cart-item small{color:#777}
+.cart-total{border-top:1px solid #ddd;padding-top:20px}
+.checkout{width:100%;padding:15px;background:#111;color:#fff;border-radius:30px;margin-top:15px;font-weight:bold}
+.empty{color:#888;text-align:center;padding:50px 0}
+@media(max-width:900px){.products{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-art{font-size:120px}.search{width:120px}nav{display:none}}
+@media(max-width:520px){.products{grid-template-columns:1fr}.features{grid-template-columns:1fr}.banner{display:block}.banner h2{font-size:32px}.section h2{font-size:30px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">RUN<span>UP</span>.</div>
+  <nav>
+    <a href="#home">首页</a><a href="#products">精选鞋款</a><a href="#about">品牌理念</a><a href="#service">服务</a>
+  </nav>
+  <div class="header-actions">
+    <input class="search" id="searchInput" placeholder="搜索鞋款..." oninput="renderProducts()">
+    <button class="cart-btn" onclick="toggleCart()">购物袋 (<span id="cartCount">0</span>)</button>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div>
+    <p><strong>RUNUP NEW SEASON / 2026</strong></p>
+    <h1>MOVE<br>YOUR<br>WORLD.</h1>
+    <p>为每一次奔跑、每一次突破，提供兼具舒适性能与街头美学的运动鞋。</p>
+    <a href="#products" class="hero-btn">探索新品 →</a>
+  </div>
+  <div class="hero-art">👟</div>
+</section>
+
+<section class="section" id="products">
+  <div class="section-head">
+    <div><p>SHOP THE COLLECTION</p><h2>热门鞋款</h2></div>
+    <p>精选舒适、轻盈、耐穿的运动鞋</p>
+  </div>
+  <div class="filters">
+    <button class="filter active" onclick="setCategory('全部',this)">全部</button>
+    <button class="filter" onclick="setCategory('跑步鞋',this)">跑步鞋</button>
+    <button class="filter" onclick="setCategory('篮球鞋',this)">篮球鞋</button>
+    <button class="filter" onclick="setCategory('休闲鞋',this)">休闲鞋</button>
+    <button class="filter" onclick="setCategory('训练鞋',this)">训练鞋</button>
+  </div>
+  <div class="products" id="productGrid"></div>
+</section>
+
+<section class="banner">
+  <div><p>RUNUP MEMBER</p><h2>加入会员<br>享受专属礼遇</h2><p>首次注册即可获得新人优惠券。</p></div>
+  <a href="#service" class="hero-btn">了解更多 →</a>
+</section>
+
+<section class="section" id="about">
+  <div class="section-head"><div><p>WHY RUNUP</p><h2>为运动而生</h2></div></div>
+  <div class="features" id="service">
+    <div class="feature"><div class="feature-icon">⚡</div><h3>轻盈脚感</h3><p>精选轻量化材料，减少负担，让每一步都更加自在。</p></div>
+    <div class="feature"><div class="feature-icon">🛡️</div><h3>安心品质</h3><p>关注鞋面、鞋底与支撑结构，满足日常运动与生活需求。</p></div>
+    <div class="feature"><div class="feature-icon">♻️</div><h3>可持续理念</h3><p>倡导理性消费与长久使用，让运动风格更具责任感。</p></div>
+  </div>
+</section>
+
+<footer>
+  <div><div class="logo">RUN<span>UP</span>.</div><p>MOVE YOUR WORLD.</p></div>
+  <div><strong>客户服务</strong><p>配送说明　退换货政策　联系我们</p></div>
+  <div><strong>关注我们</strong><p>小红书　抖音　微博</p></div>
+  <p>© 2026 RUNUP. Demo website for learning purposes.</p>
+</footer>
+
+<aside class="cart-panel" id="cartPanel">
+  <div class="cart-top"><h2>购物袋</h2><button class="close" onclick="toggleCart()">×</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-total"><div class="price-row"><strong>合计</strong><strong id="cartTotal">¥0</strong></div><button class="checkout" onclick="checkout()">去结算</button></div>
+</aside>
+
+<script>
+const products=[
+ {id:1,name:"AERO FLOW 跑鞋",category:"跑步鞋",price:499,emoji:"👟",tag:"热卖"},
+ {id:2,name:"COURT FORCE 篮球鞋",category:"篮球鞋",price:699,emoji:"👟",tag:"新品"},
+ {id:3,name:"CITY WALK 休闲鞋",category:"休闲鞋",price:399,emoji:"👟",tag:"人气"},
+ {id:4,name:"POWER TRAIN 训练鞋",category:"训练鞋",price:459,emoji:"👟",tag:"推荐"},
+ {id:5,name:"LIGHT SPEED 跑鞋",category:"跑步鞋",price:599,emoji:"👟",tag:"新品"},
+ {id:6,name:"DUNK STREET 篮球鞋",category:"篮球鞋",price:759,emoji:"👟",tag:"限量"},
+ {id:7,name:"URBAN DAILY 休闲鞋",category:"休闲鞋",price:329,emoji:"👟",tag:"热卖"},
+ {id:8,name:"FLEX CORE 训练鞋",category:"训练鞋",price:489,emoji:"👟",tag:"推荐"}
+];
+let category="全部",cart=[];
+function setCategory(c,el){category=c;document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderProducts()}
+function renderProducts(){
+ const key=document.getElementById("searchInput").value.toLowerCase();
+ const list=products.filter(p=>(category==="全部"||p.category===category)&&p.name.toLowerCase().includes(key));
+ document.getElementById("productGrid").innerHTML=list.length?list.map(p=>`
+ <article class="product-card"><div class="product-img"><span class="tag">${p.tag}</span>${p.emoji}</div>
+ <div class="product-info"><h3>${p.name}</h3><p>${p.category} · 舒适运动系列</p>
+ <div class="price-row"><span class="price">¥${p.price}</span><button class="add-btn" onclick="addToCart(${p.id})">+</button></div></div></article>`).join(""):'<p>没有找到相关鞋款。</p>';
+}
+function addToCart(id){const p=products.find(x=>x.id===id);cart.push(p);updateCart();toggleCart(true)}
+function updateCart(){
+ document.getElementById("cartCount").textContent=cart.length;
+ document.getElementById("cartItems").innerHTML=cart.length?cart.map((p,i)=>`<div class="cart-item"><div><strong>${p.name}</strong><br><small>${p.category}</small></div><strong>¥${p.price}</strong></div>`).join(""):'<div class="empty">购物袋还是空的<br>去挑选一双喜欢的鞋吧！</div>';
+ document.getElementById("cartTotal").textContent="¥"+cart.reduce((s,p)=>s+p.price,0);
+}
+function toggleCart(force){document.getElementById("cartPanel").classList.toggle("open",force===true?true:undefined)}
+function checkout(){if(!cart.length){alert("购物袋为空，请先添加商品。");return}alert("这是演示网站，暂未接入真实支付系统。");}
+renderProducts();updateCart();
+</script>
+</body>
+</html>
